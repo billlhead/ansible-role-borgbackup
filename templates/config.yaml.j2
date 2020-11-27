@@ -179,6 +179,28 @@ hooks:
         - {{ cmd }}
 {% endfor %}
 
+    # Backup specified MySQL/MariaDB databases, or 'all' to backup all databases.See
+    # https://torsion.org/borgmatic/docs/how-to/backup-your-databases/ for details.
+    # mysql_databases: 
+    #     - name: db
+{% if borgmatic_dump_mysql is defined %}
+    mysql_databases:
+  {% for database in borgmatic_dump_mysql %}
+        - {{ database | to_nice_yaml | indent(10) }}
+  {% endfor %}
+{% endif %}
+
+    # Backup specified PostgreSQL databases, or 'all' to backup all databases. See
+    # https://torsion.org/borgmatic/docs/how-to/backup-your-databases/ for details.
+    # postgres_databases: 
+    #     - name: db
+{% if borgmatic_dump_postgres is defined %}
+    postgres_databases:
+  {% for database in borgmatic_dump_postgres %}
+        - {{ database | to_nice_yaml | indent(10) }}
+  {% endfor %}
+{% endif %}
+
 {% for hook in borgmatic_hooks %}
     {{ hook }}: {{ borgmatic_hooks[hook] }}
 {% endfor %}
